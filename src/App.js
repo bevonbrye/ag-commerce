@@ -2,6 +2,9 @@ import React, { useState, useEffect} from 'react'
 import{ Products } from './components/Products/Products'; 
 import Navbar from './components/Navbar/Navbar'
 import { commerce } from './lib/commerce'
+import{ Cart } from './components/Cart/Cart'; 
+import {BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+
 
 
 
@@ -23,19 +26,32 @@ const App = () => {
         fetchCart()
     }, [])
 
-    const handleAddItemsToCart = async (productId, quantity) => {
+    
+  const handleAddToCart = async (productId, quantity) => {
+    const item = await commerce.cart.add(productId, quantity);
 
-        const item = await commerce.cart.add(productId, quantity); 
-        setCart(item.cart)
-    }
+    setCart(item.cart);
+  };
 
     console.log(cart)
 
     return( 
+        <Router>
         <div>
-            <Navbar totalItems={cart.totalItems} />
-            <Products products={products} onAddToCart={handleAddItemsToCart}/>
+            <Navbar totalItems={cart.total_items} />
+            <Switch>
+                <Route exact path='/'>
+                    <Products products={products} onAddToCart={handleAddToCart}/>
+
+                </Route>
+                <Route exact path='/'>
+                <Cart cart={cart}/>
+                </Route>
+
+            </Switch>
+            
         </div>
+        </Router>
     )
 }
 
