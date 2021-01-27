@@ -3,13 +3,16 @@ import { AppBar, Toolbar, IconButton, Badge, MenuItem, Menu, Typography } from '
 import { ShoppingCart} from '@material-ui/icons'
 import logo from '../../Assets/BVNwear.png'
 import useStyles from './styles'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 
 
 
 const Navbar = ({ totalItems } ) => {
     const classes = useStyles();
+    const location = useLocation();
+
+
     return (
         <>
             <AppBar position='fixed' className={classes.appBar} color='inherit'>
@@ -18,13 +21,15 @@ const Navbar = ({ totalItems } ) => {
                     <img src={logo} alt='Commerce.js' height='25px' className={classes.image}/> 
                 </Typography>
                 <div className={classes.grow}/>
-                <div className={classes.button}/>
+                {location.pathname === '/' && (
+                <div className={classes.button}>
 
-                <IconButton component={Link} to='/cart' aria-label='Show Cart Items' color='inherit'>
-                <Badge badgeContent={totalItems} color="secondary">
-                <ShoppingCart />
-              </Badge>
-                </IconButton>
+                    <IconButton component={Link} to='/cart' aria-label='Show Cart Items' color='inherit'>
+                        <Badge badgeContent={totalItems} color="secondary">
+                         <ShoppingCart />
+                        </Badge>
+                    </IconButton>
+                </div> )}
             </Toolbar>
             </AppBar>
         </>
