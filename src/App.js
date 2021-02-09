@@ -6,8 +6,18 @@ import { commerce } from './lib/commerce'
 import Cart from './components/Cart/Cart'; 
 import {BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { CssBaseline } from '@material-ui/core'
+// import Image from './components/LandingPage/Image'
+import { makeStyles }   from '@material-ui/styles';
+import PCC from './Assets/00clothes1.jpeg'
 
-
+const useStyles = makeStyles((theme) => ({
+  root: {
+    minHeight: '100vh',
+    backgroundImage:  `url(${PCC})`,
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: 'cover',
+  },
+}));
 
 
 const App = () => {
@@ -17,6 +27,8 @@ const App = () => {
     const [order, setOrder] = useState({});
     const [errorMessage, setErrorMessage] = useState('');
   
+    const classes = useStyles();
+
     const fetchProducts = async () => {
       const { data } = await commerce.products.list();
   
@@ -78,11 +90,12 @@ const App = () => {
   
     return (
       <Router>
-        <div style={{ display: 'flex' }}>
+        <div className={classes.root} style={{ display: 'flex' }}>
           <CssBaseline />
           <Navbar totalItems={cart.total_items} handleDrawerToggle={handleDrawerToggle} />
+          
           <Switch>
-            <Route exact path="/products">
+            <Route exact path="/">
               <Products products={products} onAddToCart={handleAddToCart} handleUpdateCartQty />
             </Route>
             <Route exact path="/cart">
@@ -92,6 +105,7 @@ const App = () => {
               <CheckoutForm cart={cart} order={order} onCaptureCheckout={handleCaptureCheckout} error={errorMessage} />
             </Route>
           </Switch>
+          
         </div>
       </Router>
     );
